@@ -1,13 +1,12 @@
+import { CardContent, CardHeader, Container, Typography } from '@mui/material';
+import Card from '@mui/material/Card';
+import Grid from '@mui/material/Grid2';
 import { useCallback, useEffect, useState } from 'react';
 import './App.css';
 import ForeCast from './components/forecast';
 import Form from './components/form';
 import Header from './components/header';
 import Weather from './components/weather';
-
-import { Avatar, CardContent, CardHeader, Typography } from '@mui/material';
-import Card from '@mui/material/Card';
-import { red } from '@mui/material/colors';
 
 const API_KEY = '3e3d2617c48cb5e56ac4fa02471f942f';
 
@@ -16,7 +15,6 @@ function App() {
   const [city, setCity] = useState<string>('campinas');
   const [forecast, setForecast] = useState<Array<string | number>>([]);
   const [searchInput, setSearchInput] = useState<string>('');
-
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -58,31 +56,40 @@ function App() {
     fetchWeatherData(city);
   }, [city, fetchWeatherData]);
 
-  if (loading) return <div className="wrapper">Loading...</div>;
+  if (loading)
+    return (
+      <Card sx={{ width: '20vw', maxWidth: '20vw', transform: 'scale(0.8)', padding: '2rem' }} variant="outlined">
+        Loading...
+      </Card>
+    );
 
   return (
-    <Card sx={{ width: '20vw', maxWidth: '20vw', transform: 'scale(0.8)', padding: '2rem' }}>
-      <CardHeader
-        title="React Weather App"
-        avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="Weather">
-            W
-          </Avatar>
-        }
-      />
+    <Container sx={{ bgcolor: '#fff', padding: '2rem' }} fixed>
+      <Card sx={{ padding: '2rem', margin: '2rem' }} variant="outlined">
+        <CardHeader
+          title={
+            <Typography variant="h1" className="temperature">
+              Weather App
+            </Typography>
+          }
+        />
 
-      {error && <Typography className="error">{error}</Typography>}
+        {error && <Typography className="error">{error}</Typography>}
+        <Form handleSearch={handleSearch} setSearchInput={setSearchInput} searchInput={searchInput} />
 
-      <Form handleSearch={handleSearch} setSearchInput={setSearchInput} searchInput={searchInput} />
-
-      {weatherData && weatherData.main && weatherData.weather && (
-        <CardContent>
-          <Header weatherData={weatherData} />
-          <Weather weatherData={weatherData} />
-        </CardContent>
-      )}
-      <ForeCast forecast={forecast} />
-    </Card>
+        <Grid container spacing={2}>
+          <Grid size={12}>
+            {weatherData && weatherData.main && weatherData.weather && (
+              <CardContent>
+                <Header weatherData={weatherData} />
+                <Weather weatherData={weatherData} />
+              </CardContent>
+            )}
+            <ForeCast forecast={forecast} />
+          </Grid>
+        </Grid>
+      </Card>
+    </Container>
   );
 }
 
