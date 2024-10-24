@@ -3,12 +3,10 @@ import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid2';
 import { useCallback, useEffect, useState } from 'react';
 import './App.css';
-import ForeCast from './components/forecast';
-import Form from './components/form';
-import Header from './components/header';
-import Weather from './components/weather';
-
-const API_KEY = '3e3d2617c48cb5e56ac4fa02471f942f';
+import ForeCast from './components/ForeCast';
+import Form from './components/Form';
+import Header from './components/Header';
+import Weather from './components/Weather';
 
 function App() {
   const [weatherData, setWeatherData] = useState<string | null>(null);
@@ -25,13 +23,17 @@ function App() {
         setLoading(true);
         setError(null);
 
-        const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${API_KEY}&units=metric&lang=pt_br`;
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${
+          import.meta.env.VITE_API_KEY
+        }&units=metric&lang=pt_br`;
         const response = await fetch(url);
         const data = await response.json();
         setWeatherData(data);
 
         const foreCastresponse = await fetch(
-          `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric&lang=pt_br`
+          `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${
+            import.meta.env.VITE_API_KEY
+          }&units=metric&lang=pt_br`
         );
         const forecastdata = await foreCastresponse.json();
 
